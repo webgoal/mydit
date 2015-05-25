@@ -2,9 +2,9 @@ package mydit
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 import scala.collection.mutable.Queue
 import scala.util.control.NonFatal
+
 
 /**
  * Error handling:
@@ -16,10 +16,16 @@ import scala.util.control.NonFatal
  * threshold, the replicator process will exit.
  */
 class Rep(config: Config) extends RepEvent.Listener {
-  private val mo = new MongoDBApplier(
+  
+  private val mo = new OutputDBApplier(
     config.mongoUri, config.mongoBinlogDb, config.mongoBinlogColl,
     config.enumToString
   )
+    
+//  private val mo = new MongoDBApplier(
+//    config.mongoUri, config.mongoBinlogDb, config.mongoBinlogColl,
+//    config.enumToString
+//  )
 
   private val failedEventQ  = Queue[RepEvent.Event]()
   private val singleThreadE = Executors.newSingleThreadExecutor()
